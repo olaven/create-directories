@@ -1,71 +1,52 @@
 const mkdirp = require('mkdirp'); 
 
-const directoryv1 = () => {
-    
-    this.create = (name) => {
-        
-        if (!this.names) {
-            this.names = []; 
-        }
-        
-        this.names.push(name); 
-        return this; 
-    }
-
-    this.now = () => {
-        let dir = __dirname; 
-        for (let name of this.names) {
-            dir += "/" + name; 
-        }
-
-        mkdirp(dir, result => console.log(result)); 
-    } 
-    
-    return this
+const assign = array => {
+    return (array ? array : []);
 }
+
 
 const directory = () => {
 
     //callback receives directory 
     this.create = (name, callback) => {
+        // create structure if this is first `create`
+        this.structure = assign(this.structure);
+
+        //i.e. has parent-create with name 
+        if (this.superdir) { // TODO: Add support for more than one subdir (use tree or similar, I think. Has to be searchable to enter at correct place)
+            this.structure[this.superdir] = assign(this.structure[this.superdir]); 
+            this.structure[this.superdir].push(name); 
+        } else {
+            this.structure[name] = []; 
+        }  
         
-        if (!this.structure) {
-            this.structure = [];
+        if (callback) {
+            this.superdir = name;
+            callback(this)
+        } else {
+            this.superdir = undefined;
         }
 
-        this.structure[name] = [];
-
-        callback(this); 
         return this;  
     }
 
     this.now = () => {
-
+        console.log("creating dir with:", this.structure); 
     }
+
+    return this; 
 }
 
-/**
- * objekt -> string-idnexed-array / array[string-indexed-array]
- *                      string - idnexed - array / array[string - indexed - array]
- *              
- */
-
-/*
 directory()
-    .create("school", (directory) => {
+    .create("hello")
+    .create("super", (directory) => {
         directory
-            .create("programming")
-            .create("algorithms")
-            .create("databases")
+            .create("subsuper", (directory) => {
+                directory 
+                    .create("subsub")
+            })
     })
-    .create("hobbies", (directory) => {
-        directory
-            .create("books")
-            .create("movies")
-            .create("cooking")
-    })
-    .create("andanother")
     .now(); 
-// module.exports = create;
 
-*/
+
+
