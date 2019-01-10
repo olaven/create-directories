@@ -1,5 +1,12 @@
 # make-directories
-Node abstraction for easy directory creation. 
+Micro-library for easy directory creation. 
+
+## TODO: 
+- [ ] Make the API work
+- [ ] Spice up readme 
+- [ ] Make repo public 
+- [ ] Publish module 
+- [ ] Typescript-definition, use dts-gen
 
 ## Usage 
 ```javascript 
@@ -12,10 +19,27 @@ directory()
     })
     .create("hobbies", (directory) => {
         directory
-            .create("books")
+            .create("books", (directory) => {
+                directory
+                    .create("fiction")
+                    .create("non-fiction")
+            })
             .create("movies")
             .create("cooking")
     })
     .create("other")
     .now(); 
 ```
+
+Will (when package is finished) produce the following directory structure: 
+* school
+  * programming
+  * algorithms
+  * databases
+* hobbies
+  * books
+    * fiction
+    * non-fiction
+  * movies
+  * cooking
+* other
