@@ -11,23 +11,26 @@ Micro-library for easy directory creation.
 ## Usage 
 ```javascript 
 directory()
-    .create("school", (directory) => {
+    .create("super", (directory) => {
         directory
-            .create("programming")
-            .create("algorithms")
-            .create("databases")
-    })
-    .create("hobbies", (directory) => {
-        directory
-            .create("books", (directory) => {
-                directory
-                    .create("fiction")
-                    .create("non-fiction")
+            .create("school", (directory) => {
+            directory
+                .create("programming")
+                .create("algorithms")
+                .create("databases")
             })
-            .create("movies")
-            .create("cooking")
+            .create("hobbies", (directory) => {
+                directory
+                    .create("books", (directory) => {
+                        directory
+                            .create("fiction")
+                            .create("non-fiction")
+                    })
+                    .create("movies")
+                    .create("cooking")
+            })
+            .create("other")
     })
-    .create("other")
     .now(); 
 ```
 

@@ -37,7 +37,7 @@ Array.prototype.containsAllIn = function(array) {
 }
 
 
-
+// The tree generation is faulty! 
 const directory = () => {
     this.currentPath = []; 
     //callback receives directory 
@@ -61,6 +61,7 @@ const directory = () => {
             this.currentPath.push(name); 
             callback(this)
         } else {
+            // FIXME: This happens too often. 
             this.currentPath.pop(); 
         }
 
@@ -68,22 +69,21 @@ const directory = () => {
     }
 
     this.now = () => {
-        
+        console.log(this.tree); 
+        let path = [];
         const iterator = (node) => {
             // dersom chlidren.length == 0 -> bunn, bygg path med parent-linker 
             // Fortsett (gjøres automatisk gjennom iterator) 
-
             if (node.children.length === 0) {
                 let current = node; 
-                let path = []; 
                 while(current !== undefined && current !== null) {
                     path.push(current.data); 
                     current = current.parent; 
                 }
-                path.pop(); 
-                path = path.reverse().join("/"); 
-                
-                mkdirp(path);  
+                path.pop(); // remove top-object
+                let pathString = path.reverse().join("/"); 
+                mkdirp(pathString);
+                path = []; 
             }
         } 
 
@@ -93,5 +93,29 @@ const directory = () => {
 
     return this; 
 }
+
+// CALLING FOR TESTING
+directory()
+    .create("super", (directory) => {
+        directory
+            .create("school", (directory) => {
+                directory
+                    .create("programming")
+                    .create("algorithms")
+                    .create("databases")
+            })
+            .create("hobbies", (directory) => {
+                directory
+                    .create("books", (directory) => {
+                        directory
+                            .create("fiction")
+                            .create("non-fiction")
+                    })
+                    .create("movies")
+                    .create("cooking")
+            })
+            .create("other")
+    })
+    .now(); 
 
 module.exports = directory; 
