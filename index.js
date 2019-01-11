@@ -4,13 +4,6 @@ const Arboreal = require('arboreal');
 const tree = new Arboreal(); 
 
 
-tree
-    .appendChild("super1")
-    .appendChild("super2")
-    .children[0]
-        .appendChild("sub1sup2")
-        .appendChild("sub2sup2"); 
-   
 
 /**
  * Returns the first node that matches 
@@ -24,21 +17,40 @@ const find = (pattern) => {
     })
 }
 
+/**
+ * Returns the last element in array
+ */
+Array.prototype.peek = function() {
+    if (this.length <= 0) return null; 
+    return this[this.length - 1]; 
+}
+
+/**
+ * Returns true if the array contains 
+ * all node in given array based on their data 
+ */
+Array.prototype.containsAllIn = function(array) {
+
+    return array.filter(node => 
+        this.find(n => n.data === node.data) !== undefined
+    ).length === array.length; 
+}
 
 
 
 const directory = () => {
-
+    this.currentPath = []; 
     //callback receives directory 
     this.create = (name, callback) => {
         // create structure if this is first `create`
         this.tree = (this.tree? this.tree: tree) 
 
-        //i.e. has parent-create with name 
-        if (this.superdir) { // TODO: Add support for more than one subdir (use tree or similar, I think. Has to be searchable to enter at correct place)
-            // find location of superdir int tree 
+        //i.e. is going down in a path 
+        if (this.currentPath.length > 0) { 
+            // find location of currentPath int tree 
             // add name under that 
-            let node = find("sub2sup2");
+            let currentSuperDir = this.currentPath.peek(); 
+            let node = find(currentSuperDir);
             node.appendChild(name); 
         } else {
             // append on root in tree 
@@ -46,39 +58,40 @@ const directory = () => {
         }  
         
         if (callback) {
-            this.superdir = name;
+            this.currentPath.push(name); 
             callback(this)
-        }/* else { I believe this is a mistake -> when in sub, I do just have the same superdir 
-            this.superdir = undefined;
-        }*/
+        } else {
+            this.currentPath.pop(); 
+        }
 
         return this;  
     }
 
     this.now = () => {
-        // console.log("creating dir with:", this.tree);
-        /*
+        
         const iterator = (node) => {
-            // console.log(node);  
-        }
+            // dersom chlidren.length == 0 -> bunn, bygg path med parent-linker 
+            // Fortsett (gjøres automatisk gjennom iterator) 
 
-        tree.traverseDown(iterator);  */
+            if (node.children.length === 0) {
+                let current = node; 
+                let path = []; 
+                while(current !== undefined && current !== null) {
+                    path.push(current.data); 
+                    current = current.parent; 
+                }
+                path.pop(); 
+                path = path.reverse().join("/"); 
+                
+                mkdirp(path);  
+            }
+        } 
+
+        this.tree.traverseDown(iterator); 
+        
     }
 
     return this; 
 }
 
-directory()
-    .create("hello")
-    .create("school", (directory) => {
-        directory
-            .create("algorithms", (directory) => {
-                directory 
-                    .create("notes")
-            })
-            .create("programming")
-    })
-    .now(); 
-
-
-
+module.exports = directory; 
