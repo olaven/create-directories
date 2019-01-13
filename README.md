@@ -7,31 +7,29 @@ Micro-library for easy directory creation.
 - [ ] Make repo public 
 - [ ] Publish module 
 - [ ] Typescript-definition, use dts-gen
+- [ ] Refactoring and clean-up
+- [ ] Build in custom directory
 
 ## Usage 
 ```javascript 
 directory()
-    .create("super", (directory) => {
+    .create("school", (directory) => {
         directory
-            .create("school", (directory) => {
-            directory
-                .create("programming")
-                .create("algorithms")
-                .create("databases")
-            })
-            .create("hobbies", (directory) => {
-                directory
-                    .create("books", (directory) => {
-                        directory
-                            .create("fiction")
-                            .create("non-fiction")
-                    })
-                    .create("movies")
-                    .create("cooking")
-            })
-            .create("other")
+            .create("programming")
+            .create("algorithms")
+            .create("databases")
     })
-    .now(); 
+    .create("hobbies", (directory) => {
+        directory
+            .create("books", (directory) => {
+                directory
+                    .create("fiction")
+                    .create("non-fiction")
+            })
+            .create("movies")
+            .create("cooking")
+    })
+    .create("other")
 ```
 
 Will (when package is finished) produce the following directory structure: 

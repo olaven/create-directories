@@ -51,25 +51,34 @@ const directory = () => {
             // add name under that 
             let currentSuperDir = this.currentPath.peek(); 
             let node = find(currentSuperDir);
+            this.depth = node.depth; 
             node.appendChild(name); 
         } else {
             // append on root in tree 
             tree.appendChild(name); 
+            this.depth = 0; 
         }  
         
         if (callback) {
             this.currentPath.push(name); 
             callback(this)
         } else {
-            // FIXME: This happens too often. 
-            this.currentPath.pop(); 
+            this.currentPath.pop();
         }
 
         return this;  
+
     }
 
     this.now = () => {
-        console.log(this.tree); 
+
+        // Below code just for debuging 
+        const printIterator = (node) => {
+            console.log("-".repeat(node.depth) + "> " + node.data)
+        };
+        this.tree.traverseDown(printIterator);
+        // Above code just for debuging
+
         let path = [];
         const iterator = (node) => {
             // dersom chlidren.length == 0 -> bunn, bygg path med parent-linker 
