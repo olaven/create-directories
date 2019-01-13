@@ -3,6 +3,8 @@ Micro-library for easy directory creation.
 
 ## Usage 
 ```javascript 
+const mkdir = require("create-directories"); 
+
 const structure = {
     "books": {
         "fiction": {}
@@ -19,7 +21,11 @@ const structure = {
     "other": {}
 }
 
+// creates directories in current directory 
 mkdir(structure); 
+
+// creates directory in other root
+mkdir(structure, "/path/to/other/root"); 
 ```
 
 Will produce the following directory structure: 
@@ -38,7 +44,7 @@ Will produce the following directory structure:
 ## TODO: 
 - [X] Make the API work
 - [ ] Spice up readme 
-- [ ] Make repo public 
-- [ ] Publish module 
+- [X] Make repo public 
+- [X] Publish module 
 - [X] Refactoring and clean-up
-- [ ] Build in custom directory
+- [X] Build in custom directory
