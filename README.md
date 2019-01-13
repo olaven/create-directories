@@ -2,7 +2,7 @@
 Micro-library for easy directory creation. 
 
 ## Installation 📦
-`yarn add make-cirectories`
+`yarn add create-directories`
 
 ## Usage 💻 ☕️
 ```javascript 
